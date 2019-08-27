@@ -7,23 +7,25 @@
 
 #include "std_msgs/msg/string.hpp"
 #include <sensor_msgs/msg/point_cloud2.hpp>
+#include <geometry_msgs/msg/pose_stamped.hpp>
+#include <geometry_msgs/msg/pose.hpp>
 
-void print_usage()
+/*void print_usage()
 {
   printf("Usage for listener app:\n");
   printf("listener [-t topic_name] [-h]\n");
   printf("options:\n");
   printf("-h : Print this help function.\n");
   printf("-t topic_name : Specify the topic on which to subscribe. Defaults to chatter.\n");
-}
+}*/
 
 // Create a Listener class that subclasses the generic rclcpp::Node base class.
 // The main function below will instantiate the class as a ROS node.
 class Listener : public rclcpp::Node
 {
 public:
-  explicit Listener(const std::string & topic_name = "/filtered_points",
-		  const std::string & topic_name2 = "/map")
+  explicit Listener(const std::string & topic_name = "filtered_points",
+		  const std::string & topic_name2 = "cloud_pcd")
   : Node("listener")
   {
     // Create a callback function for when messages are received.
@@ -32,7 +34,6 @@ public:
       [this](const sensor_msgs::msg::PointCloud2::SharedPtr msg) -> void
       {
     	RCLCPP_INFO(this->get_logger(), "I heard filtered point: [%s]", msg->header.frame_id.c_str());
-        RCLCPP_INFO(this->get_logger(), "I heard: [%s]", msg->header.frame_id.c_str());
         //TODO:
         // here you call NdtLib function and pass in the msg as input
         // return a pose message and publish it as https://github.com/ros2/common_interfaces/blob/master/geometry_msgs/msg/PoseStamped.msg
@@ -77,14 +78,15 @@ int main(int argc, char * argv[])
   rclcpp::init(argc, argv);
 
   // Parse the command line options.
-  auto topic = std::string("points_raw");
+  /*auto topic = std::string("points_raw");
   char * cli_option = rcutils_cli_get_option(argv, argv + argc, "-t");
   if (nullptr != cli_option) {
     topic = std::string(cli_option);
-  }
+  }*/
 
   // Create a node.
-  auto node = std::make_shared<Listener>(topic);
+  //auto node = std::make_shared<Listener>(topic);
+  auto node = std::make_shared<Listener>();
   // spin will block until work comes in, execute work as it becomes available, and keep blocking.
   // It will only be interrupted by Ctrl-C.
   rclcpp::spin(node);
