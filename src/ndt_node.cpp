@@ -22,7 +22,8 @@ void print_usage()
 class Listener : public rclcpp::Node
 {
 public:
-  explicit Listener(const std::string & topic_name, const std::string & topic_name2 = "map")
+  explicit Listener(const std::string & topic_name = "/filtered_points",
+		  const std::string & topic_name2 = "/map")
   : Node("listener")
   {
     // Create a callback function for when messages are received.
@@ -30,6 +31,7 @@ public:
     auto callback =
       [this](const sensor_msgs::msg::PointCloud2::SharedPtr msg) -> void
       {
+    	RCLCPP_INFO(this->get_logger(), "I heard filtered point: [%s]", msg->header.frame_id.c_str());
         RCLCPP_INFO(this->get_logger(), "I heard: [%s]", msg->header.frame_id.c_str());
         //TODO:
         // here you call NdtLib function and pass in the msg as input
@@ -39,10 +41,11 @@ public:
     auto callback2 =
     [this](const sensor_msgs::msg::PointCloud2::SharedPtr msg) -> void
       {
-        RCLCPP_INFO(this->get_logger(), "I heard: [%s]", msg->header.frame_id.c_str());
+        RCLCPP_INFO(this->get_logger(), "I heard point cloud map: [%s]", msg->header.frame_id.c_str());
         //TODO: here you get your map point cloud (one time only)
       };
 
+    RCLCPP_INFO(this->get_logger(), "Started the ndt_matching node...");
     // Create a subscription to the topic which can be matched with one or more compatible ROS
     // publishers.
     // Note that not all publishers on the same topic with the same type will be compatible:
@@ -82,7 +85,6 @@ int main(int argc, char * argv[])
 
   // Create a node.
   auto node = std::make_shared<Listener>(topic);
-
   // spin will block until work comes in, execute work as it becomes available, and keep blocking.
   // It will only be interrupted by Ctrl-C.
   rclcpp::spin(node);
