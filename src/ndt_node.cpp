@@ -37,6 +37,19 @@ public:
         //TODO:
         // here you call NdtLib function and pass in the msg as input
         // return a pose message and publish it as https://github.com/ros2/common_interfaces/blob/master/geometry_msgs/msg/PoseStamped.msg
+
+    	// TODO: Create a return PoseStampled message to publish
+    	geometry_msgs::msg::PoseStamped estimated_pose;
+    	estimated_pose.header.frame_id = "estimated_pose";
+    	estimated_pose.pose.position.x = 1;
+    	estimated_pose.pose.position.y = 2;
+    	estimated_pose.pose.position.z = 3;
+    	estimated_pose.pose.orientation.w = 0;
+    	estimated_pose.pose.orientation.x = 0.5;
+    	estimated_pose.pose.orientation.y = 0.3;
+    	estimated_pose.pose.orientation.z = 0.2;
+    	//estimated_pose.header.stamp = msg->
+    	pub_->publish(estimated_pose);
       };
 
     auto callback2 =
@@ -55,11 +68,18 @@ public:
     sub2_ = create_subscription<sensor_msgs::msg::PointCloud2>(topic_name2, callback2);
     // TODO: create a pose publisher, see for reference
     // https://github.com/ros2/demos/blob/master/demo_nodes_cpp/src/topics/talker.cpp
+    pub_ = create_publisher<geometry_msgs::msg::PoseStamped>("estimated_pose");
   }
 
 private:
   rclcpp::Subscription<sensor_msgs::msg::PointCloud2>::SharedPtr sub_;
   rclcpp::Subscription<sensor_msgs::msg::PointCloud2>::SharedPtr sub2_;
+  rclcpp::Publisher<geometry_msgs::msg::PoseStamped>::SharedPtr pub_;
+
+  // Initial pose and vector of estimated poses
+  // TODO: Move to ndt_matching class encapsulation
+  std::unique_ptr<geometry_msgs::msg::Pose> initial_pose_;
+  std::vector<geometry_msgs::msg::PoseStamped> estimated_poses_v_;
 };
 
 int main(int argc, char * argv[])
@@ -67,10 +87,10 @@ int main(int argc, char * argv[])
   // Force flush of the stdout buffer.
   setvbuf(stdout, NULL, _IONBF, BUFSIZ);
 
-  if (rcutils_cli_option_exist(argv, argv + argc, "-h")) {
+  /*if (rcutils_cli_option_exist(argv, argv + argc, "-h")) {
     print_usage();
     return 0;
-  }
+  }*/
 
   // Initialize any global resources needed by the middleware and the client library.
   // You must call this before using any other part of the ROS system.
