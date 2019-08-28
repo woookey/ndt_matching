@@ -24,7 +24,23 @@ geometry_msgs::msg::PoseStamped NdtLib::execute(pcl::PointCloud<pcl::PointXYZ> &
 	(void)lidar_point_cloud;
 	(void)pose_guess;
 
-	//pcl::VoxelGrid
+	// create downsampled VoxelGrid for the map
+
+	// get covariances and means for voxelgrid
+
+	/**
+	 * Loop until converges
+	 *
+	 * 	for all points
+	 * 		transform pose_guess with PointCloud from filtered points
+	 * 		find cell containing each point
+	 * 		calculate score based on distribution
+	 * 		calculate jacobian
+	 * 		calculate hessian
+	 *
+	 * 	solve H*dp = -g
+	 * 	move pose_guess by dp
+	 */
 
 	return estimate;
 }
