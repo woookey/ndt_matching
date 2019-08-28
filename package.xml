@@ -3,18 +3,16 @@
 <package format="2">
   <name>ndt_matching</name>
   <version>0.0.0</version>
-  <description>TODO: Package description</description>
-  <maintainer email="dejan@apex.ai">dejan.pangercic</maintainer>
+  <description>3D-NDT Node implemention</description>
+  <maintainer email="lukaszbarczyk@actuatedrobots.com">lukasz.barczyk</maintainer>
   <license>TODO: License declaration</license>
   <buildtool_depend>ament_cmake_ros</buildtool_depend>
 
   <build_depend>rclcpp</build_depend>
-  <build_depend>rcutils</build_depend>
   <build_depend>std_msgs</build_depend>
   <build_depend>sensor_msgs</build_depend>
 
   <exec_depend>rclcpp</exec_depend>
-  <exec_depend>rcutils</exec_depend>
   <exec_depend>std_msgs</exec_depend>
   <exec_depend>sensor_msgs</exec_depend>
 

@@ -18,16 +18,13 @@ endif()
 # find dependencies
 find_package(ament_cmake REQUIRED)
 find_package(ament_cmake_ros REQUIRED)
-# uncomment the following section in order to fill in
-# further dependencies manually.
-# find_package(<dependency> REQUIRED)
 find_package(rclcpp REQUIRED)
-find_package(rcutils)
 find_package(std_msgs REQUIRED)
 find_package(sensor_msgs REQUIRED)
+find_package(PCL 1.8 REQUIRED)
 
 add_library(ndt_lib src/ndt_lib.cpp)
-target_include_directories(ndt_lib PUBLIC
+target_include_directories(ndt_lib PUBLIC /opt/ros/dashing/include
   $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
   $<INSTALL_INTERFACE:include>)
 
@@ -47,6 +44,9 @@ install(
   RUNTIME DESTINATION bin
 )
 
+include_directories(${PCL_INCLUDE_DIRS})
+link_directories(${PCL_LIBRARY_DIRS})
+
 add_executable(ndt_node src/ndt_node.cpp)
 
 ament_target_dependencies(ndt_node
@@ -58,22 +58,22 @@ ament_target_dependencies(ndt_node
 target_include_directories(ndt_node PUBLIC
   $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
   $<INSTALL_INTERFACE:include>)
-target_link_libraries(ndt_node ndt_lib)
+target_link_libraries(ndt_node ndt_lib ${PCL_LIBRARIES})
 
 install(TARGETS ndt_node
   EXPORT export_${PROJECT_NAME}
   DESTINATION lib/${PROJECT_NAME})
 
-if(BUILD_TESTING)
-  find_package(ament_lint_auto REQUIRED)
+#if(BUILD_TESTING)
+#  find_package(ament_lint_auto REQUIRED)
   # the following line skips the linter which checks for copyrights
   # remove the line when a copyright and license is present in all source files
-  set(ament_cmake_copyright_FOUND TRUE)
+#  set(ament_cmake_copyright_FOUND TRUE)
   # the following line skips cpplint (only works in a git repo)
   # remove the line when this package is a git repo
-  set(ament_cmake_cpplint_FOUND TRUE)
-  ament_lint_auto_find_test_dependencies()
-endif()
+#  set(ament_cmake_cpplint_FOUND TRUE)
+#  ament_lint_auto_find_test_dependencies()
+#endif()
 
 ament_export_include_directories(
   include
