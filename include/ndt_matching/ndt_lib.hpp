@@ -4,6 +4,7 @@
 #include "ndt_matching/visibility_control.h"
 #include <pcl/point_cloud.h>
 #include <pcl/point_types.h>
+//#include <pcl/filters/voxel_grid.h>
 #include <geometry_msgs/msg/pose_stamped.hpp>
 
 #include <memory>
@@ -24,6 +25,7 @@ public:
 private:
   bool map_registered = false;
   pcl::PointCloud<pcl::PointXYZ> point_cloud_;
+  //pcl::VoxelGrid voxel_grid_;
 };
 
 }  // namespace ndt_matching
